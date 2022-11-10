@@ -9,8 +9,8 @@ public interface BookServicePort {
 
     BookDto addBook(BookDto bookDto);
     void deleteBookById(Long id);
-    BookDto updateBook(Long id, BookDto bookDto);
-    BookDto getBookById(Long bookId);
+    Optional<BookDto> updateBook(Long id, BookDto bookDto);
+    Optional<BookDto> getBookById(Long bookId);
     List<BookDto> getBooks();
 
 }

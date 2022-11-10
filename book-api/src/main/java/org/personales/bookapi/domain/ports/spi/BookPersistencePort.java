@@ -9,8 +9,8 @@ public interface BookPersistencePort {
 
     BookDto addBook(BookDto bookDto);
     void deleteBookById(Long id);
-    BookDto updateBook(Long id,BookDto bookDto);
+    Optional<BookDto> updateBook(Long id,BookDto bookDto);
     List<BookDto> getBooks();
-    BookDto getBookById(Long bookId);
+    Optional<BookDto> getBookById(Long bookId);
 }
 
