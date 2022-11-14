@@ -5,9 +5,7 @@ import org.personales.ratingapi.domain.ports.api.RatingServicePort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,8 +17,37 @@ public class RatingController {
     private RatingServicePort ratingServicePort;
 
     @GetMapping()
-    private ResponseEntity<List<RatingDto>> getAllRatings() {
+    public ResponseEntity<List<RatingDto>> getAllRatings() {
         return new ResponseEntity<>(ratingServicePort.getRatings(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{ratingId}")
+    public ResponseEntity<RatingDto> getRatingById(@PathVariable Long ratingId) {
+        return ratingServicePort.getRatingById(ratingId)
+                .map(rating -> new ResponseEntity<>(rating, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping
+    public ResponseEntity<RatingDto> addRating(@RequestBody RatingDto ratingDto) {
+        return new ResponseEntity<>(ratingServicePort.addRating(ratingDto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{ratingId}")
+    public ResponseEntity<RatingDto> updateRating(@PathVariable Long ratingId, @RequestBody RatingDto ratingDto){
+        return ratingServicePort.updateRating(ratingId, ratingDto)
+                .map(rating -> new ResponseEntity<>(rating, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @DeleteMapping("/{ratingId}")
+    public ResponseEntity<?> deleteRating(@PathVariable Long ratingId) {
+        if(ratingServicePort.getRatingById(ratingId).isEmpty()) {
+            return new ResponseEntity<>("Rating with Id: " + ratingId + " no encontrado" ,HttpStatus.NOT_FOUND);
+        } else {
+            ratingServicePort.deleteRatingById(ratingId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
 }
