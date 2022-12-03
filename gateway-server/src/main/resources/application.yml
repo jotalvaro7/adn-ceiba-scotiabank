@@ -1,0 +1,17 @@
+#configuracion de spring cloud gateway con load balancing, circuit breaker.
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: msvc-book-api
+          uri: lb://msvc-book-api
+          predicates:
+            - Path=/books/**
+          filters:
+            - StripPrefix=1
+        - id: msvc-rating-api
+          uri: lb://msvc-rating-api
+          predicates:
+            - Path=/ratings/**
+          filters:
+            - StripPrefix=1

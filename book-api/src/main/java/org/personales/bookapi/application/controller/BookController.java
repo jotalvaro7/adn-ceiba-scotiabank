@@ -10,38 +10,37 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/books")
 public class BookController {
 
     @Autowired
     private BookServicePort bookServicePort;
 
 
-    @GetMapping()
+    @GetMapping("/listar")
     public ResponseEntity<List<BookDto>> getAllBooks() {
         return new ResponseEntity<>(bookServicePort.getBooks(), HttpStatus.OK);
     }
 
-    @GetMapping("/{bookId}")
+    @GetMapping("/listar/{bookId}")
     public ResponseEntity<BookDto> getBookById(@PathVariable long bookId) {
         return bookServicePort.getBookById(bookId)
                 .map(bookDto -> new ResponseEntity<>(bookDto, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping()
+    @PostMapping("/crear")
     public ResponseEntity<BookDto> addBook(@RequestBody BookDto bookDto) {
         return new ResponseEntity<>(bookServicePort.addBook(bookDto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{bookId}")
+    @PutMapping("/editar/{bookId}")
     public ResponseEntity<BookDto> updateBook(@PathVariable long bookId, @RequestBody BookDto bookDto) {
         return bookServicePort.updateBook(bookId, bookDto)
                 .map(bookUpdate -> new ResponseEntity<>(bookUpdate, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @DeleteMapping("/{bookId}")
+    @DeleteMapping("eliminar/{bookId}")
     public ResponseEntity<?> deleteBook(@PathVariable long bookId) {
         if(bookServicePort.getBookById(bookId).isEmpty()) {
             return new ResponseEntity<>("Book with Id: " + bookId + " no encontrado" ,HttpStatus.NOT_FOUND);

@@ -10,37 +10,36 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ratings")
 public class RatingController {
 
     @Autowired
     private RatingServicePort ratingServicePort;
 
-    @GetMapping()
+    @GetMapping("/listar")
     public ResponseEntity<List<RatingDto>> getAllRatings() {
         return new ResponseEntity<>(ratingServicePort.getRatings(), HttpStatus.OK);
     }
 
-    @GetMapping("/{ratingId}")
+    @GetMapping("/listar/{ratingId}")
     public ResponseEntity<RatingDto> getRatingById(@PathVariable Long ratingId) {
         return ratingServicePort.getRatingById(ratingId)
                 .map(rating -> new ResponseEntity<>(rating, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping
+    @PostMapping("/crear")
     public ResponseEntity<RatingDto> addRating(@RequestBody RatingDto ratingDto) {
         return new ResponseEntity<>(ratingServicePort.addRating(ratingDto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{ratingId}")
+    @PutMapping("/editar/{ratingId}")
     public ResponseEntity<RatingDto> updateRating(@PathVariable Long ratingId, @RequestBody RatingDto ratingDto){
         return ratingServicePort.updateRating(ratingId, ratingDto)
                 .map(rating -> new ResponseEntity<>(rating, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @DeleteMapping("/{ratingId}")
+    @DeleteMapping("/eliminar/{ratingId}")
     public ResponseEntity<?> deleteRating(@PathVariable Long ratingId) {
         if(ratingServicePort.getRatingById(ratingId).isEmpty()) {
             return new ResponseEntity<>("Rating with Id: " + ratingId + " no encontrado" ,HttpStatus.NOT_FOUND);
