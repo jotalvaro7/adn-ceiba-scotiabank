@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.personales.msvcusuarios.domain.data.UserDto;
 import org.personales.msvcusuarios.domain.ports.spi.UserPersistencePort;
+import org.personales.msvcusuarios.infrastructure.entity.Role;
+import org.personales.msvcusuarios.infrastructure.entity.User;
 import org.personales.msvcusuarios.infrastructure.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,9 @@ public class UserJpaAdapter implements UserPersistencePort {
     @Override
     @Transactional
     public UserDto addUser(UserDto userDto) {
-        return null;
+        User user = mapper.map(userDto, User.class);
+        User userSaved = userRepository.save(user);
+        return mapper.map(userSaved, UserDto.class);
     }
 
     @Override
@@ -39,22 +43,44 @@ public class UserJpaAdapter implements UserPersistencePort {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<UserDto> getUserById(Long id) {
-        return Optional.empty();
+        return userRepository.findById(id)
+                .map(user -> {
+                    return mapper.map(user, UserDto.class);
+                });
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<UserDto> getUserByUsername(String username) {
-        return Optional.empty();
+        return userRepository.findByUsername(username)
+                .map(user -> {
+                    return mapper.map(user, UserDto.class);
+                });
     }
 
     @Override
-    public Optional<UserDto> updateUser(Long id, UserDto userDto) {
-        return Optional.empty();
+    @Transactional
+    public Optional<UserDto> updateUser(Long userId, UserDto userDto) {
+        return userRepository.findById(userId)
+                .map(user -> {
+                    user.setUsername(userDto.getUsername());
+                    user.setPassword(userDto.getPassword());
+                    user.setNombre(userDto.getNombre());
+                    user.setApellido(userDto.getApellido());
+                    user.setEmail(userDto.getEmail());
+                    user.setRoles(userDto.getRoles().stream()
+                            .map(roleDto -> {
+                                return mapper.map(roleDto, Role.class);
+                            }).collect(Collectors.toList()));
+                    return mapper.map(userRepository.save(user), UserDto.class);
+                });
     }
 
     @Override
-    public void deleteUserById(Long id) {
-
+    @Transactional
+    public void deleteUserById(Long userId) {
+        userRepository.deleteById(userId);
     }
 }
