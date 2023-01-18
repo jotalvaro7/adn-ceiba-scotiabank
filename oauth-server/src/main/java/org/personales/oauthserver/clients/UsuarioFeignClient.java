@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "msvc-usuarios")
 public interface UsuarioFeignClient {
 
-    @GetMapping("/listar/username/{username}")
+    @GetMapping("api/v1/listar/username/{username}")
     UserDb findByUsername (@RequestParam String username);
 
 }

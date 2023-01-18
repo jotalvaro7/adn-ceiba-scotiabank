@@ -15,3 +15,9 @@ spring:
             - Path=/ratings/**
           filters:
             - StripPrefix=1
+        - id: msvc-usuarios
+          uri: lb://msvc-usuarios
+          predicates:
+            - Path=/usuarios/**
+          filters:
+            - StripPrefix=1
