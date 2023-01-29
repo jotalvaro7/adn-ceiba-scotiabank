@@ -1,24 +1,41 @@
 package org.personales.gatewayserver.security;
 
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.http.HttpMethod;
-//import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-//import org.springframework.security.config.web.server.ServerHttpSecurity;
-//import org.springframework.security.web.server.SecurityWebFilterChain;
+import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 
-//@EnableWebFluxSecurity
-//public class SpringSecurityConfig {
-//
-//    @Bean
-//    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http){
-//        return http
-//                .authorizeExchange()
-//                .pathMatchers("/api/security/**").permitAll()
-//                .pathMatchers(HttpMethod.GET,
-//                        "/api/v1/books",
-//                        "/api/v1/ratings").permitAll()
-//                .anyExchange().authenticated()
-//                .and().csrf().disable()
-//                .build();
-//    }
-//}
+@EnableWebFluxSecurity
+@AllArgsConstructor
+public class SpringSecurityConfig {
+
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Bean
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http){
+        return http
+                .authorizeExchange()
+                .pathMatchers(
+                        "/api/security/**").permitAll()
+                .pathMatchers(
+                        HttpMethod.GET,
+                        "/books/api/v1/listar",
+                        "/ratings/api/v1/listar",
+                        "/usuarios/api/v1/listar").permitAll()
+                .pathMatchers(
+                        HttpMethod.GET,
+                        "/usuarios/api/v1/listar/{userId}",
+                        "/usuarios/api/v1/listar/username/{username}").hasAnyRole("ADMIN", "USER")
+                .pathMatchers(
+                        "/usuarios/api/v1/**",
+                        "/ratings/api/v1/**",
+                        "/books/api/v1/**").hasAnyRole("ADMIN")
+                .anyExchange().authenticated()
+                .and().addFilterAt(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+                .csrf().disable()
+                .build();
+    }
+}
