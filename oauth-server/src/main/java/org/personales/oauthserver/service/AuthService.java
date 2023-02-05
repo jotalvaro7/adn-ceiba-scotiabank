@@ -1,6 +1,7 @@
 package org.personales.oauthserver.service;
 
 import com.netflix.discovery.converters.Auto;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.personales.oauthserver.clients.UsuarioFeignClient;
 import org.personales.oauthserver.models.AuthCredentials;
@@ -18,6 +19,7 @@ import java.util.Objects;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class AuthService {
 
     @Autowired
@@ -36,6 +38,7 @@ public class AuthService {
 
         try{
             UserDb userDb = client.findByUsername(authCredentials.getUsername());
+            log.info("usuario obtenido: {}", userDb.getUsername());
             if(passwordEncoder.matches(authCredentials.getPassword(), userDb.getPassword())){
                 return new Token(jwtProvider.createToken(userDb));
             }else {
