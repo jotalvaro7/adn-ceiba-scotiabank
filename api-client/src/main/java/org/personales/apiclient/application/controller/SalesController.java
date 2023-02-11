@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.personales.apiclient.domain.data.BookDto;
 import org.personales.apiclient.domain.data.RatingDto;
+import org.personales.apiclient.domain.data.SalesDto;
 import org.personales.apiclient.infrastructure.feign.bookApi.BookApiFeign;
 import org.personales.apiclient.infrastructure.feign.ratingApi.RatingAPiFeign;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -24,14 +26,20 @@ public class SalesController {
 
 
     @GetMapping("/listar/books")
-    public ResponseEntity<List<BookDto>> showAllBooks() {
+    public ResponseEntity<List<SalesDto>> showAllSales() {
         List<BookDto> allBooks = bookApiFeign.getAllBooks();
-        if (allBooks.isEmpty()) {
-            log.warn("No se han encontrado libros");
+        List<RatingDto> allRatings = ratingApiFeign.getAllRatings();
+
+        if (allBooks.isEmpty() || allRatings.isEmpty()) {
+            log.warn("No se ha encontrado data");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            log.info("Lista de libros: {}", allBooks);
-            return new ResponseEntity<>(allBooks, HttpStatus.OK);
+            List<SalesDto> allSales = allBooks.stream()
+                    .flatMap(bookDto -> allRatings.stream()
+                            .filter(ratingDto -> ratingDto.getBookId().equals(bookDto.getId()))
+                            .map(ratingDto -> new SalesDto(bookDto, ratingDto, 1)))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(allSales, HttpStatus.OK);
         }
     }
 
