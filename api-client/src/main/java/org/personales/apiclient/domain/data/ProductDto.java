@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SalesDto {
+public class ProductDto {
     private BookDto bookDto;
     private RatingDto ratingDto;
     private Integer cantidad;
