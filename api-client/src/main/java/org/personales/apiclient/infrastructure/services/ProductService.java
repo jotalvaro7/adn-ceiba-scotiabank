@@ -8,6 +8,7 @@ import org.personales.apiclient.infrastructure.clients.BookApiFeign;
 import org.personales.apiclient.infrastructure.clients.RatingAPiFeign;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,7 +23,7 @@ public class ProductService {
         List<RatingDto> allRatings = ratingAPiFeign.getAllRatings();
         List<ProductDto> allProducts;
         if (allBooks.isEmpty() || allRatings.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         } else {
             allProducts = allBooks.stream()
                     .flatMap(bookDto -> allRatings.stream()
@@ -31,5 +32,16 @@ public class ProductService {
                     .toList();
             return allProducts;
         }
+    }
+
+    public ProductDto getProductById(Long id, Integer cantidad){
+        BookDto bookDto = bookApiFeign.getBookById(id);
+        RatingDto ratingDto = ratingAPiFeign.getRatingById(id);
+
+        return ProductDto.builder()
+                .bookDto(bookDto)
+                .ratingDto(ratingDto)
+                .cantidad(cantidad)
+                .build();
     }
 }
