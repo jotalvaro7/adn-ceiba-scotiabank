@@ -1,6 +1,6 @@
-package org.personales.apiclient.infrastructure.feign.ratingApi;
+package org.personales.apiclient.infrastructure.clients;
 
-import org.personales.apiclient.domain.data.RatingDto;
+import org.personales.apiclient.domain.RatingDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 

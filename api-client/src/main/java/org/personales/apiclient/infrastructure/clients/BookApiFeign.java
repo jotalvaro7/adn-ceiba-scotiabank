@@ -1,6 +1,6 @@
-package org.personales.apiclient.infrastructure.feign.bookApi;
+package org.personales.apiclient.infrastructure.clients;
 
-import org.personales.apiclient.domain.data.BookDto;
+import org.personales.apiclient.domain.BookDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 

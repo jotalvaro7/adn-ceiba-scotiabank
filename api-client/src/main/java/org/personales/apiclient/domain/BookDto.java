@@ -1,4 +1,4 @@
-package org.personales.apiclient.domain.data;
+package org.personales.apiclient.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RatingDto {
+public class BookDto {
+
     private Long id;
-    private Long bookId;
-    private Integer starts;
+    private String title;
+    private String author;
+    private Double price;
     private Integer port;
 }
-

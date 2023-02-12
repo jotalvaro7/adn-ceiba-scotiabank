@@ -1,4 +1,4 @@
-package org.personales.apiclient.domain.data;
+package org.personales.apiclient.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
