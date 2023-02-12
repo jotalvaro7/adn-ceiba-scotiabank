@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -29,7 +30,7 @@ public class ProductService {
                     .flatMap(bookDto -> allRatings.stream()
                             .filter(ratingDto -> ratingDto.getBookId().equals(bookDto.getId()))
                             .map(ratingDto -> new ProductDto(bookDto, ratingDto, 1)))
-                    .toList();
+                    .collect(Collectors.toList());
             return allProducts;
         }
     }

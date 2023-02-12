@@ -21,6 +21,7 @@ public class ProductController {
 
     @GetMapping("/listar/")
     public ResponseEntity<List<ProductDto>> allProducts() {
+        log.info("Consultando productos");
         List<ProductDto> allProducts = productServicePort.getProducts();
         if (allProducts.isEmpty()) {
             log.warn("Productos no encontrados");
