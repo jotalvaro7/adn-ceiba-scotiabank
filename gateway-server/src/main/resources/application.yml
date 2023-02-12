@@ -27,3 +27,9 @@ spring:
             - Path=/api/security/**
           filters:
             - StripPrefix=2
+        - id: msvc-api-client
+          uri: lb://msvc-api-client
+          predicates:
+            - Path=/products/**
+          filters:
+            - StripPrefix=1

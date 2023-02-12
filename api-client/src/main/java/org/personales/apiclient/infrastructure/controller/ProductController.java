@@ -19,7 +19,7 @@ public class ProductController {
 
     private final ProductService productServicePort;
 
-    @GetMapping("/listar/")
+    @GetMapping("/listar")
     public ResponseEntity<List<ProductDto>> allProducts() {
         log.info("Consultando productos");
         List<ProductDto> allProducts = productServicePort.getProducts();

@@ -24,7 +24,9 @@ public class SpringSecurityConfig {
                         HttpMethod.GET,
                         "/books/api/v1/listar",
                         "/ratings/api/v1/listar",
-                        "/usuarios/api/v1/listar").permitAll()
+                        "/usuarios/api/v1/listar",
+                        "/products/api/v1/listar",
+                        "/products/api/v1/listar/{productoId}/cantidad/{cantidad}").permitAll()
                 .pathMatchers(
                         HttpMethod.GET,
                         "/usuarios/api/v1/listar/{userId}",
