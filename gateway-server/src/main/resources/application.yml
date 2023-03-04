@@ -1,3 +1,25 @@
+#configuracion de los parámetros de circuitBreaker y timeout
+resilience4j:
+  circuitbreaker:
+    configs:
+      defecto:
+        slidingWindowSize: 6
+        failureRateThreshold: 50
+        waitDurationInOpenState: 20s
+        permittedNumberOfCallsInHalfOpenState: 4
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 2s
+    instances:
+      productos:
+        baseConfig: defecto
+  timelimiter:
+    configs:
+      defecto:
+        timeoutDuration: 2s
+    instances:
+      productos:
+        baseConfig: defecto
+
 #configuracion de spring cloud gateway con load balancing, circuit breaker.
 spring:
   cloud:
@@ -33,3 +55,14 @@ spring:
             - Path=/products/**
           filters:
             - StripPrefix=1
+            - name: CircuitBreaker
+              args:
+                name: productos
+                statusCodes: 500
+                fallbackUri: forward:/failover/products/api/v1/listar
+        - id: msvc-api-client-failover
+          uri: lb://msvc-api-client-failover
+          predicates:
+            - Path=/failover/products/**
+          filters:
+            - StripPrefix=2
