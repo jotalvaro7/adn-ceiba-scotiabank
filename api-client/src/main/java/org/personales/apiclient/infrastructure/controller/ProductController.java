@@ -8,9 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
+
 
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class ProductController {
     private final ProductService productServicePort;
 
     @GetMapping("/listar")
-    public ResponseEntity<List<ProductDto>> allProducts() {
+    public ResponseEntity<List<ProductDto>> allProducts() throws InterruptedException {
         log.info("Consultando productos");
         List<ProductDto> allProducts = productServicePort.getProducts();
         if (allProducts.isEmpty()) {
