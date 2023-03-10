@@ -2,7 +2,8 @@ package org.personales.gatewayserver.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,15 +20,14 @@ import java.util.stream.Collectors;
 @Component
 public class AuthenticationManagerJwt implements ReactiveAuthenticationManager {
 
-    @Value("${config.security.oauth.jwt.key}")
-    private String keyJwt;
-
+    @Autowired
+    private Environment env;
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
         return Mono.just(authentication.getCredentials().toString())
                 .map(token -> {
-                    SecretKey key = Keys.hmacShaKeyFor(keyJwt.getBytes());
+                    SecretKey key = Keys.hmacShaKeyFor(env.getProperty("config.security.oauth.jwt.key").getBytes());
                     return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
                 })
                 .map(claims -> {
