@@ -47,7 +47,7 @@ services:
       - eureka-server
     networks:
       - lan
-  
+
   rating-api:
     container_name: rating-api
     build:
@@ -58,58 +58,34 @@ services:
       - eureka-server
     networks:
       - lan
-  
+
   msvc-usuarios:
     container_name: msvc-usuarios
     build:
       context: ./msvc-usuarios
       dockerfile: Dockerfile
+    ports:
+      - "7072:7072"
     depends_on:
       - config-server
       - eureka-server
     networks:
       - lan
-
+  
   oauth-server:
     container_name: oauth-server
     build:
       context: ./oauth-server
       dockerfile: Dockerfile
+    ports:
+      - "9100:9100"
     depends_on:
       - config-server
       - eureka-server
       - msvc-usuarios
     networks:
       - lan
-  
-  api-client:
-    container_name: api-client
-    build:
-      context: ./api-client
-      dockerfile: Dockerfile
-    depends_on:
-      - config-server
-      - eureka-server
-      - rating-api
-      - book-api
-      - redis
-    networks:
-      - lan
-  
-  api-client-failover:
-    container_name: api-client-failover
-    build:
-      context: ./api-client-failover
-      dockerfile: Dockerfile
-    depends_on:
-      - config-server
-      - eureka-server
-      - rating-api
-      - book-api
-      - api-client
-    networks:
-      - lan
-  
+
   gateway-server:
     container_name: gateway-server
     build:
@@ -122,12 +98,11 @@ services:
       - eureka-server
       - rating-api
       - book-api
-      - api-client
-      - api-client-failover
       - msvc-usuarios
       - oauth-server
     networks:
       - lan
+
 
 networks:
   lan:

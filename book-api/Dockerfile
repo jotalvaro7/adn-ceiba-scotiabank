@@ -13,7 +13,10 @@ RUN ./mvnw clean package -DskipTest
 FROM openjdk:11-jdk-slim
 ARG TARGET_FOLDER=/app/target
 COPY --from=builder $TARGET_FOLDER/book-api-0.0.1-SNAPSHOT.jar .
-#ARG PORT_APP=8090
-#ENV PORT $PORT_APP
-#EXPOSE $PORT
-CMD ["java", "-jar", "book-api-0.0.1-SNAPSHOT.jar"]
+
+# Install the wait-for-it script
+RUN apt-get update && apt-get install -y wget
+RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+RUN chmod +x wait-for-it.sh
+
+CMD ["./wait-for-it.sh", "eureka-server:8761", "--timeout=30", "--", "java", "-jar", "book-api-0.0.1-SNAPSHOT.jar"]
