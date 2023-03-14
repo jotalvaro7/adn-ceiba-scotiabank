@@ -1,17 +1,15 @@
 package org.personales.bookapi.infrastructure.adapters;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.personales.bookapi.domain.data.BookDto;
 import org.personales.bookapi.domain.ports.spi.BookPersistencePort;
 import org.personales.bookapi.infrastructure.entity.Book;
 import org.personales.bookapi.infrastructure.repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,14 +18,11 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class BookJpaAdapter implements BookPersistencePort {
-
-    @Autowired
-    private BookRepository bookRepository;
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    private Environment env;
+    private final BookRepository bookRepository;
+    private final ModelMapper modelMapper;
+    private final Environment env;
 
     @Override
     @Transactional

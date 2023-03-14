@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.personales.bookapi.domain.data.BookDto;
 import org.personales.bookapi.domain.ports.api.BookServicePort;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class BookController {
 
-    @Autowired
-    private BookServicePort bookServicePort;
-
+    private final BookServicePort bookServicePort;
 
     @GetMapping("/listar")
     public ResponseEntity<List<BookDto>> getAllBooks() {
@@ -28,7 +25,7 @@ public class BookController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             log.info("Lista de libros: {}", allBooks);
-            return new ResponseEntity<>(bookServicePort.getBooks(), HttpStatus.OK);
+            return new ResponseEntity<>(allBooks, HttpStatus.OK);
         }
     }
 
