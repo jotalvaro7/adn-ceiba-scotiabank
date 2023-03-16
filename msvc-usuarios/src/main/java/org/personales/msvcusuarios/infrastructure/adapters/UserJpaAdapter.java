@@ -1,5 +1,6 @@
 package org.personales.msvcusuarios.infrastructure.adapters;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.personales.msvcusuarios.domain.data.UserDto;
@@ -7,7 +8,6 @@ import org.personales.msvcusuarios.domain.ports.spi.UserPersistencePort;
 import org.personales.msvcusuarios.infrastructure.entity.Role;
 import org.personales.msvcusuarios.infrastructure.entity.User;
 import org.personales.msvcusuarios.infrastructure.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,15 +15,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service
+
 @Slf4j
+@AllArgsConstructor
+@Service
 public class UserJpaAdapter implements UserPersistencePort {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ModelMapper mapper;
+    private final UserRepository userRepository;
+    private final ModelMapper mapper;
 
     @Override
     @Transactional

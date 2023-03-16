@@ -16,8 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserServiceImpl userServiceImpl;
+    private final UserServiceImpl userServiceImpl;
 
     @GetMapping("/listar")
     public ResponseEntity<List<UserDto>> getAllUsers() {
