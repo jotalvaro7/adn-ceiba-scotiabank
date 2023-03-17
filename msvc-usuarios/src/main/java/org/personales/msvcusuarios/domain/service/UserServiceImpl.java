@@ -1,6 +1,6 @@
 package org.personales.msvcusuarios.domain.service;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.personales.msvcusuarios.domain.data.UserDto;
 import org.personales.msvcusuarios.domain.ports.api.UserServicePort;
 import org.personales.msvcusuarios.domain.ports.spi.UserPersistencePort;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserServiceImpl implements UserServicePort {
 
     private final UserPersistencePort userPersistencePort;

@@ -1,12 +1,12 @@
 package org.personales.ratingapi.infrastructure.adapters;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.personales.ratingapi.domain.data.RatingDto;
 import org.personales.ratingapi.domain.ports.spi.RatingPersistencePort;
 import org.personales.ratingapi.infrastructure.entity.Rating;
 import org.personales.ratingapi.infrastructure.repository.RatingRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,16 +15,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service
+
 @Slf4j
+@AllArgsConstructor
+@Service
 public class RatingJpaAdapter implements RatingPersistencePort {
 
-    @Autowired
-    private RatingRepository ratingRepository;
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    private Environment env;
+    private final RatingRepository ratingRepository;
+    private final ModelMapper modelMapper;
+    private final Environment env;
 
 
     @Override
