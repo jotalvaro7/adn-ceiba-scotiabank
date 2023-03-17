@@ -1,19 +1,18 @@
 package org.personales.ratingapi.domain.service;
 
+import lombok.AllArgsConstructor;
 import org.personales.ratingapi.domain.data.RatingDto;
 import org.personales.ratingapi.domain.ports.api.RatingServicePort;
 import org.personales.ratingapi.domain.ports.spi.RatingPersistencePort;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 @Service
 public class RatingServiceImpl implements RatingServicePort {
-
-    @Autowired
-    private RatingPersistencePort ratingPersistencePort;
+    private final RatingPersistencePort ratingPersistencePort;
 
     @Override
     public RatingDto addRating(RatingDto ratingDto) {

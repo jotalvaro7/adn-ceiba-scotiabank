@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.personales.ratingapi.domain.data.RatingDto;
 import org.personales.ratingapi.domain.ports.api.RatingServicePort;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RatingController {
 
-    @Autowired
-    private RatingServicePort ratingServicePort;
+    private final RatingServicePort ratingServicePort;
 
     @GetMapping("/listar")
     public ResponseEntity<List<RatingDto>> getAllRatings() {
@@ -27,7 +25,7 @@ public class RatingController {
            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             log.info("Lista de ratings: {}", allRatings);
-            return new ResponseEntity<>(ratingServicePort.getRatings(), HttpStatus.OK);
+            return new ResponseEntity<>(allRatings, HttpStatus.OK);
         }
     }
 
