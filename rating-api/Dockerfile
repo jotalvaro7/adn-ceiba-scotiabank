@@ -14,9 +14,5 @@ FROM openjdk:11-jdk-slim
 ARG TARGET_FOLDER=/app/target
 COPY --from=builder $TARGET_FOLDER/rating-api-0.0.1-SNAPSHOT.jar .
 
-# Install the wait-for-it script
-RUN apt-get update && apt-get install -y wget
-RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
-RUN chmod +x wait-for-it.sh
 
-CMD ["./wait-for-it.sh", "eureka-server:8761", "--timeout=30", "--", "java", "-jar", "rating-api-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "rating-api-0.0.1-SNAPSHOT.jar"]
