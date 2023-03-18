@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: book-api
+  template:
+    metadata:
+      labels:
+        app: book-api
+    spec:
+      containers:
+      - image: juliocesarosorio709/book-api:latest
+        name: book-api
+        ports:
+        - containerPort: 1000
+          name: port-book-api
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: book-api
+spec:
+  ports:
+  - port: 10
+    protocol: TCP
+    targetPort: port-book-api
+  selector:
+    app: eureka-server
+  type: LoadBalancer

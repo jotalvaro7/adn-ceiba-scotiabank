@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: msvc-usuarios
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: msvc-usuarios
+  template:
+    metadata:
+      labels:
+        app: msvc-usuarios
+    spec:
+      containers:
+      - image: juliocesarosorio709/msvc-usuarios:latest
+        name: msvc-usuarios
+        ports:
+        - containerPort: 7072
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: msvc-usuarios
+spec:
+  ports:
+  - port: 7072
+    protocol: TCP
+    targetPort: 7072
+  selector:
+    app: msvc-usuarios
+  type: LoadBalancer
