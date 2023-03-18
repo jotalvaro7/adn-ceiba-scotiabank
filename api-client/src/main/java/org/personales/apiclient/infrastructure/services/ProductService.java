@@ -32,13 +32,13 @@ public class ProductService {
         RBucket<List<BookDto>> booksBucket = redissonClient.getBucket("books");
         RBucket<List<RatingDto>> ratingsBucket = redissonClient.getBucket("ratings");
         List<BookDto> allBooks = booksBucket.get();
-        if(allBooks.isEmpty()){
+        if(allBooks == null){
             Thread.sleep(1000L);
             allBooks = bookApiFeign.getAllBooks();
             booksBucket.set(allBooks, 2, TimeUnit.MINUTES);
         }
         List<RatingDto> allRatings = ratingsBucket.get();
-        if(allRatings.isEmpty()){
+        if(allRatings == null){
             allRatings = ratingAPiFeign.getAllRatings();
             ratingsBucket.set(allRatings, 2, TimeUnit.MINUTES);
         }
