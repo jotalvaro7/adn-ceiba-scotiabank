@@ -19,9 +19,10 @@ services:
 
   config-server:
     container_name: config-server
-    build:
-      context: ./config-server
-      dockerfile: Dockerfile
+    image: juliocesarosorio709/config-server:latest
+    # build:
+    #   context: ./config-server
+    #   dockerfile: Dockerfile
     ports:
       - "8888:8888"
     networks:
@@ -29,9 +30,7 @@ services:
   
   eureka-server:
     container_name: eureka-server
-    build:
-      context: ./eureka-server
-      dockerfile: Dockerfile
+    image: juliocesarosorio709/eureka-server:latest
     ports:
       - "8761:8761"
     networks:
@@ -39,9 +38,7 @@ services:
   
   book-api:
     container_name: book-api
-    build:
-      context: ./book-api
-      dockerfile: Dockerfile
+    image: juliocesarosorio709/book-api:latest
     depends_on:
       - config-server
       - eureka-server
@@ -50,9 +47,7 @@ services:
 
   rating-api:
     container_name: rating-api
-    build:
-      context: ./rating-api
-      dockerfile: Dockerfile
+    image: juliocesarosorio709/rating-api:latest
     depends_on:
       - config-server
       - eureka-server
@@ -61,9 +56,7 @@ services:
 
   msvc-usuarios:
     container_name: msvc-usuarios
-    build:
-      context: ./msvc-usuarios
-      dockerfile: Dockerfile
+    image: juliocesarosorio709/msvc-usuarios:latest
     ports:
       - "7072:7072"
     depends_on:
@@ -74,9 +67,7 @@ services:
   
   oauth-server:
     container_name: oauth-server
-    build:
-      context: ./oauth-server
-      dockerfile: Dockerfile
+    image: juliocesarosorio709/oauth-server:latest
     ports:
       - "9100:9100"
     depends_on:
@@ -88,23 +79,22 @@ services:
 
   api-client:
     container_name: api-client
-    build:
-      context: ./api-client
-      dockerfile: Dockerfile
+    image: juliocesarosorio709/api-client:latest
+    environment:
+      REDISADDRESS: redis://redis:6379
     depends_on:
       - config-server
       - eureka-server
-      - rating-api
       - book-api
+      - rating-api
       - redis
     networks:
       - lan
+
   
   api-client-failover:
     container_name: api-client-failover
-    build:
-      context: ./api-client-failover
-      dockerfile: Dockerfile
+    image: juliocesarosorio709/api-client-failover
     depends_on:
       - config-server
       - eureka-server
@@ -116,23 +106,11 @@ services:
   
   gateway-server:
     container_name: gateway-server
-    build:
-      context: ./gateway-server
-      dockerfile: Dockerfile
+    image: juliocesarosorio709/gateway-server:latest
     ports:
       - "8090:8090"
-    depends_on:
-      - config-server
-      - eureka-server
-      - rating-api
-      - book-api
-      - api-client
-      - api-client-failover
-      - msvc-usuarios
-      - oauth-server
     networks:
       - lan
-
 
 networks:
   lan:
