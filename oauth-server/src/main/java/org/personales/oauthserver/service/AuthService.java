@@ -1,6 +1,5 @@
 package org.personales.oauthserver.service;
 
-import com.netflix.discovery.converters.Auto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.personales.oauthserver.clients.UsuarioFeignClient;
@@ -8,7 +7,6 @@ import org.personales.oauthserver.models.AuthCredentials;
 import org.personales.oauthserver.models.Token;
 import org.personales.oauthserver.models.UserDb;
 import org.personales.oauthserver.security.JwtProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,17 +20,12 @@ import java.util.Objects;
 @AllArgsConstructor
 public class AuthService {
 
-    @Autowired
-    private UsuarioFeignClient client;
+    private final UsuarioFeignClient client;
 
-    @Autowired
-    private JwtProvider jwtProvider;
+    private final JwtProvider jwtProvider;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private Tracer tracer;
+    private final PasswordEncoder passwordEncoder;
+    private final Tracer tracer;
 
     public Token login (AuthCredentials authCredentials){
 
