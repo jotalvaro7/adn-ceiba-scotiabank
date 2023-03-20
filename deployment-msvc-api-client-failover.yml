@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: msvc-api-client-failover
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: msvc-api-client-failover
+  template:
+    metadata:
+      labels:
+        app: msvc-api-client-failover
+    spec:
+      containers:
+      - image: juliocesarosorio709/msvc-api-client-failover:latest
+        name: msvc-api-client-failover
+        ports:
+        - containerPort: 3000
+          name: port-msvc-api-client-failover
+        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: msvc-api-client-failover
+spec:
+  ports:
+  - port: 30
+    protocol: TCP
+    targetPort: port-msvc-api-client-failover
+  selector:
+    app: msvc-api-client-failover
+  type: LoadBalancer
