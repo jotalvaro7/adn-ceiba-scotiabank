@@ -29,7 +29,7 @@ metadata:
   name: msvc-api-client
 spec:
   ports:
-  - port: 30
+  - port: 3000
     protocol: TCP
     targetPort: port-msvc-api-client
   selector:
