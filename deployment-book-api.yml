@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: book-api
+  name: msvc-book-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: book-api
+      app: msvc-book-api
   template:
     metadata:
       labels:
-        app: book-api
+        app: msvc-book-api
     spec:
       containers:
-      - image: juliocesarosorio709/book-api:latest
-        name: book-api
+      - image: juliocesarosorio709/msvc-book-api:latest
+        name: msvc-book-api
         ports:
         - containerPort: 1000
           name: port-book-api
@@ -23,12 +23,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: book-api
+  name: msvc-book-api
 spec:
   ports:
-  - port: 10
+  - port: 1000
     protocol: TCP
     targetPort: port-book-api
   selector:
-    app: eureka-server
+    app: msvc-book-api
   type: LoadBalancer
