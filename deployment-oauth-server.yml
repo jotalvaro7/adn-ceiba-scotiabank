@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: oauth-server
+  name: msvc-oauth
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: oauth-server
+      app: msvc-oauth
   template:
     metadata:
       labels:
-        app: oauth-server
+        app: msvc-oauth
     spec:
       containers:
-      - image: juliocesarosorio709/oauth-server:latest
+      - image: juliocesarosorio709/msvc-oauth:latest
         name: oauth-server
         ports:
         - containerPort: 9100
@@ -22,12 +22,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: oauth-server
+  name: msvc-oauth
 spec:
   ports:
   - port: 9100
     protocol: TCP
     targetPort: 9100
   selector:
-    app: oauth-server
+    app: msvc-oauth
   type: LoadBalancer
