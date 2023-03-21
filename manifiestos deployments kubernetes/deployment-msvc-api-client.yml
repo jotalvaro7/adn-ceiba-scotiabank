@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: msvc-api-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: msvc-api-client
+  template:
+    metadata:
+      labels:
+        app: msvc-api-client
+    spec:
+      initContainers:
+      - name: wait-for-config-server
+        image: busybox:1.28
+        command: ['sh', '-c', 'until nslookup config-server; do echo waiting for config-server; sleep 2; done;'] 
+      - name: wait-for-redis
+        image: busybox:1.28
+        command: ['sh', '-c', 'until nslookup redis; do echo waiting for redis; sleep 2; done;']
+      - name: wait-for-zipkin-server
+        image: busybox:1.28
+        command: ['sh', '-c', 'until nslookup zipkin-server; do echo waiting for zipkin-server; sleep 2; done;'] 
+      containers:
+      - image: juliocesarosorio709/msvc-api-client:latest
+        name: msvc-api-client
+        ports:
+        - containerPort: 2002
+        env:
+        - name: REDISADDRESS
+          value: redis://redis:6379
+        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: msvc-api-client
+spec:
+  ports:
+  - port: 2002
+    protocol: TCP
+    targetPort: 2002
+  selector:
+    app: msvc-api-client
+  type: LoadBalancer

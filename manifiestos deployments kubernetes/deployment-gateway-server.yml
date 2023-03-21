@@ -12,6 +12,13 @@ spec:
       labels:
         app: gateway-server
     spec:
+      initContainers:
+      - name: wait-for-config-server
+        image: busybox:1.28
+        command: ['sh', '-c', 'until nslookup config-server; do echo waiting for config-server; sleep 2; done;'] 
+      - name: wait-for-zipkin-server
+        image: busybox:1.28
+        command: ['sh', '-c', 'until nslookup zipkin-server; do echo waiting for zipkin-server; sleep 2; done;'] 
       containers:
       - name: gateway-server
         image: juliocesarosorio709/gateway-server:latest

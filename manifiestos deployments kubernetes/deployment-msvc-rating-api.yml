@@ -12,12 +12,18 @@ spec:
       labels:
         app: msvc-rating-api
     spec:
+      initContainers:
+      - name: wait-for-config-server
+        image: busybox:1.28
+        command: ['sh', '-c', 'until nslookup config-server; do echo waiting for config-server; sleep 2; done;']
+      - name: wait-for-zipkin-server
+        image: busybox:1.28
+        command: ['sh', '-c', 'until nslookup zipkin-server; do echo waiting for zipkin-server; sleep 2; done;']
       containers:
       - image: juliocesarosorio709/msvc-rating-api:latest
         name: msvc-rating-api
         ports:
-        - containerPort: 2000
-          name: port-msvc-rating-api
+        - containerPort: 2001
 
 ---
 apiVersion: v1
@@ -26,9 +32,9 @@ metadata:
   name: msvc-rating-api
 spec:
   ports:
-  - port: 2000
+  - port: 2001
     protocol: TCP
-    targetPort: port-msvc-rating-api
+    targetPort: 2001
   selector:
     app: msvc-rating-api
   type: LoadBalancer
