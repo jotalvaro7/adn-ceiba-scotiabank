@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+ name: config-server
+data:
+  username: jotalvaro7
+  branch: kubernetes
