@@ -77,6 +77,22 @@ services:
     build:
       context: ./rating-api
       dockerfile: Dockerfile
+    ports:
+      - "2001:2001"
+    depends_on:
+      - config-server
+      - eureka-server
+    networks:
+      - lan
+  
+  rating-api-alternative:
+    container_name: rating-api-alternative
+    #image: juliocesarosorio709/rating-api:latest
+    build:
+      context: ./rating-api
+      dockerfile: Dockerfile
+    ports:
+      - "2101:2001"
     depends_on:
       - config-server
       - eureka-server
