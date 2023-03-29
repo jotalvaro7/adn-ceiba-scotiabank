@@ -13,6 +13,9 @@ RUN ./mvnw clean package -DskipTest
 FROM openjdk:11-jdk-slim
 ARG TARGET_FOLDER=/app/target
 COPY --from=builder $TARGET_FOLDER/rating-api-0.0.1-SNAPSHOT.jar .
+ARG PORT_APP=2001
+ENV PORT $PORT_APP
+EXPOSE $PORT
 
 # Install the wait-for-it script
 RUN apt-get update && apt-get install -y wget

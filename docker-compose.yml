@@ -28,7 +28,7 @@ services:
     environment:
       GIT_BRANCH: docker
       GIT_USERNAME: jotalvaro7
-      GIT_PASSWORD: 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
+      GIT_PASSWORD: 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
     networks:
       - lan
   
@@ -49,6 +49,22 @@ services:
     build:
       context: ./book-api
       dockerfile: Dockerfile
+    ports:
+      - "2000:2000"
+    depends_on:
+      - config-server
+      - eureka-server
+    networks:
+      - lan
+
+  book-api-alternative:
+    container_name: book-api-alternative
+    #image: juliocesarosorio709/book-api:latest
+    build:
+      context: ./book-api
+      dockerfile: Dockerfile
+    ports:
+      - "2100:2000"
     depends_on:
       - config-server
       - eureka-server
