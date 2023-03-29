@@ -1,4 +1,4 @@
-package org.personales.ratingapi.infrastructure.configuration;
+package org.personales.ratingapi.infrastructure.adapters.configuration;
 
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.WeightedResponseTimeRule;
