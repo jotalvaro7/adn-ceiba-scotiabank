@@ -4,17 +4,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.personales.bookapi.domain.data.BookDto;
 import org.personales.bookapi.domain.ports.api.BookServicePort;
 import org.personales.bookapi.infrastructure.entity.Book;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
@@ -26,11 +28,14 @@ class BookControllerTest {
     @Mock
     private BookServicePort bookServicePort;
 
+    @Mock
+    private ResourceLoader resourceLoader;
+
     private BookController bookController;
 
     @BeforeEach
     void setUp() {
-        bookController = new BookController(bookServicePort);
+        bookController = new BookController(bookServicePort, resourceLoader);
     }
 
     @Test
@@ -156,6 +161,34 @@ class BookControllerTest {
         assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
         verify(bookServicePort).getBookById(bookId);
 
+    }
+
+    @Test
+    public void cargarImagenDebeRetornarImagenEnBytes() throws Exception {
+        // Crear objeto BookDto para la prueba
+        BookDto book = new BookDto();
+        book.setId(1L);
+        book.setImage("imagen.jpg");
+
+        // Crear objeto Resource para la prueba
+        InputStream inputStream = new ByteArrayInputStream("imagen de prueba".getBytes());
+        Resource resource = Mockito.mock(Resource.class);
+        Mockito.when(resource.getInputStream()).thenReturn(inputStream);
+
+        // Configurar comportamiento del bookServicePort mock
+        Mockito.when(bookServicePort.getBookById(1L)).thenReturn(Optional.of(book));
+
+        // Configurar comportamiento del resourceLoader mock
+        Mockito.when(resourceLoader.getResource("classpath:static/" + book.getImage())).thenReturn(resource);
+
+        // Ejecutar el método a probar
+        ResponseEntity<byte[]> response = bookController.cargarImagen(1L);
+
+        // Verificar que la respuesta tiene un estatus 200
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        // Verificar que la imagen retornada es la correcta
+        assertEquals("imagen de prueba", new String(Objects.requireNonNull(response.getBody())));
     }
 
 }

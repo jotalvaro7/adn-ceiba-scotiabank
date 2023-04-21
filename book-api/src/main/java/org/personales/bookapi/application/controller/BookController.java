@@ -2,13 +2,21 @@ package org.personales.bookapi.application.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.personales.bookapi.domain.data.BookDto;
 import org.personales.bookapi.domain.ports.api.BookServicePort;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -16,6 +24,8 @@ import java.util.List;
 public class BookController {
 
     private final BookServicePort bookServicePort;
+
+    private final ResourceLoader resourceLoader;
 
     @GetMapping("/listar")
     public ResponseEntity<List<BookDto>> getAllBooks() {
@@ -71,6 +81,17 @@ public class BookController {
             bookServicePort.deleteBookById(bookId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+    }
+
+    @GetMapping("/image/{id}")
+    public ResponseEntity<byte[]> cargarImagen(@PathVariable("id") Long id) throws IOException {
+        Optional<BookDto> book = bookServicePort.getBookById(id);
+        Resource resource = resourceLoader.getResource("classpath:static/" + book.get().getImage());
+        InputStream inputStream = resource.getInputStream();
+        byte[] imagen = IOUtils.toByteArray(inputStream);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        return new ResponseEntity<>(imagen, headers, HttpStatus.OK);
     }
 
 
