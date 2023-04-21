@@ -1,0 +1,93 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "EurekaServerApplication",
+            "request": "launch",
+            "mainClass": "org.personales.eurekaserver.EurekaServerApplication",
+            "projectName": "eureka-server",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=57440 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=eureka-server"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ConfigServerApplication<config-server>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "org.personales.configserver.ConfigServerApplication",
+            "projectName": "config-server",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=56848 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=config-server"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-GatewayServerApplication<gateway-server>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "org.personales.gatewayserver.GatewayServerApplication",
+            "projectName": "gateway-server",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MsvcUsuariosApplication<msvc-usuarios>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "org.personales.msvcusuarios.MsvcUsuariosApplication",
+            "projectName": "msvc-usuarios",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-OauthServerApplication<oauth-server>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "org.personales.oauthserver.OauthServerApplication",
+            "projectName": "oauth-server",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-BookApiApplication<book-api>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "org.personales.bookapi.BookApiApplication",
+            "projectName": "book-api",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-RatingApiApplication<rating-api>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "org.personales.ratingapi.RatingApiApplication",
+            "projectName": "rating-api",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ApiClientFailoverApplication<api-client-failover>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "org.personales.apiclientfailover.ApiClientFailoverApplication",
+            "projectName": "api-client-failover",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ApiClientApplication<api-client>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "org.personales.apiclient.ApiClientApplication",
+            "projectName": "api-client",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
