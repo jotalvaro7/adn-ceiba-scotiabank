@@ -35,11 +35,13 @@ public class ProductService {
         if(allBooks == null){
             Thread.sleep(1000L);
             allBooks = bookApiFeign.getAllBooks();
+            System.out.println("Books fuera de la cache de redis: " + allBooks);
             booksBucket.set(allBooks, 2, TimeUnit.MINUTES);
         }
         List<RatingDto> allRatings = ratingsBucket.get();
         if(allRatings == null){
             allRatings = ratingAPiFeign.getAllRatings();
+            System.out.println("ratings fuera de la cache de redis: " + allRatings);
             ratingsBucket.set(allRatings, 2, TimeUnit.MINUTES);
         }
         List<ProductDto> allProducts;

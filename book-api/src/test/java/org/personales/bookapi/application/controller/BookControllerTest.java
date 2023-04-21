@@ -36,8 +36,8 @@ class BookControllerTest {
     @Test
     void getAllBooks_ShouldReturn200AndListOfBooks_WhenBooksAreFound() {
         List<BookDto> allBooks = Arrays.asList(
-                new BookDto(1L, "Title 1", "Author 1", 1000d, 1010),
-                new BookDto(2L, "Title 2", "Author 2", 2000d, 1010)
+                new BookDto(1L, "Title 1", "Author 1", 1000d, "url1", 1010),
+                new BookDto(2L, "Title 2", "Author 2", 2000d, "url2", 1010)
         );
 
         when(bookServicePort.getBooks()).thenReturn(allBooks);
@@ -64,7 +64,7 @@ class BookControllerTest {
     @Test
     void getBookById_ShouldReturn200AndBook_WhenBookByIdIsFound() {
         Long bookId = 1L;
-        BookDto bookDto = new BookDto(1L, "Title 1", "Author 1", 1000d, 1010);
+        BookDto bookDto = new BookDto(1L, "Title 1", "Author 1", 1000d, "url1", 1010);
 
         when(bookServicePort.getBookById(bookId)).thenReturn(Optional.of(bookDto));
 
@@ -90,7 +90,7 @@ class BookControllerTest {
 
     @Test
     void addBook_ShouldReturnBook_whenBookIsAdd() {
-        BookDto bookDto = new BookDto(1L, "Title 1", "Author 1", 1000d, 1010);
+        BookDto bookDto = new BookDto(1L, "Title 1", "Author 1", 1000d, "url1", 1010);
 
         when(bookServicePort.addBook(bookDto)).thenReturn(bookDto);
 
@@ -103,7 +103,7 @@ class BookControllerTest {
     @Test
     void updateBook_ShouldReturn200AndBookUpdate_WhenBookIsFound() {
         Long bookId = 1L;
-        BookDto bookUpdateDto = new BookDto(1L, "Title 1", "Author 1", 1000d, 1010);
+        BookDto bookUpdateDto = new BookDto(1L, "Title 1", "Author 1", 1000d, "url1", 1010);
 
         when(bookServicePort.updateBook(bookId, bookUpdateDto)).thenReturn(Optional.of(bookUpdateDto));
 
