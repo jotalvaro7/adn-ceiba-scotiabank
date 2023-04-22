@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -84,14 +85,15 @@ public class BookController {
     }
 
     @GetMapping("/image/{id}")
-    public ResponseEntity<byte[]> cargarImagen(@PathVariable("id") Long id) throws IOException {
+    public ResponseEntity<String> cargarImagen(@PathVariable("id") Long id) throws IOException {
         Optional<BookDto> book = bookServicePort.getBookById(id);
         Resource resource = resourceLoader.getResource("classpath:static/" + book.get().getImage());
         InputStream inputStream = resource.getInputStream();
         byte[] imagen = IOUtils.toByteArray(inputStream);
+        String encodedImage = Base64Utils.encodeToString(imagen);
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        return new ResponseEntity<>(imagen, headers, HttpStatus.OK);
+        headers.add(HttpHeaders.CONTENT_TYPE, "text/plain");
+        return new ResponseEntity<>(encodedImage, headers, HttpStatus.OK);
     }
 
 

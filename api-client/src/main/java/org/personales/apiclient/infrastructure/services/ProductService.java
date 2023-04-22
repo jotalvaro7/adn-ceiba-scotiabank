@@ -11,6 +11,7 @@ import org.personales.apiclient.infrastructure.config.CaffeineCacheConfig;
 import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -67,5 +68,9 @@ public class ProductService {
                 .ratingDto(ratingDto)
                 .cantidad(cantidad)
                 .build();
+    }
+
+    public String getImageById(Long id){
+        return bookApiFeign.getImageById(id);
     }
 }
