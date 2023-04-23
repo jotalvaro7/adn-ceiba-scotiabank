@@ -7,15 +7,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.personales.bookapi.domain.data.BookDto;
 import org.personales.bookapi.domain.ports.api.BookServicePort;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Base64Utils;
-
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,14 +21,11 @@ class BookControllerTest {
     @Mock
     private BookServicePort bookServicePort;
 
-    @Mock
-    private ResourceLoader resourceLoader;
-
     private BookController bookController;
 
     @BeforeEach
     void setUp() {
-        bookController = new BookController(bookServicePort, resourceLoader);
+        bookController = new BookController(bookServicePort);
     }
 
     @Test
@@ -163,29 +154,27 @@ class BookControllerTest {
     }
 
     @Test
-    public void testCargarImagen() throws IOException {
-        // Arrange
+    void getImage_ShouldReturnCodedImage_WhenTheImageExist() throws IOException {
         Long id = 1L;
-        String imageName = "testImage.jpg";
-        BookDto book = new BookDto();
-        book.setId(id);
-        book.setImage(imageName);
+        String expectedEncodedImage = "encoded-image";
 
-        byte[] imageBytes = new byte[]{1, 2, 3, 4};
-        InputStream inputStream = new ByteArrayInputStream(imageBytes);
-        String expectedEncodedImage = Base64Utils.encodeToString(imageBytes);
+        when(bookServicePort.getImage(id)).thenReturn(expectedEncodedImage);
 
-        Resource resource = mock(Resource.class);
-        when(bookServicePort.getBookById(id)).thenReturn(Optional.of(book));
-        when(resourceLoader.getResource("classpath:static/" + imageName)).thenReturn(resource);
-        when(resource.getInputStream()).thenReturn(inputStream);
+        ResponseEntity<String> response = bookController.obtenerImagen(id);
 
-        // Act
-        ResponseEntity<String> responseEntity = bookController.cargarImagen(id);
-
-        // Assert
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals("text/plain", responseEntity.getHeaders().getContentType().toString());
-        assertEquals(expectedEncodedImage, responseEntity.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("text/plain", Objects.requireNonNull(response.getHeaders().getContentType()).toString());
+        assertEquals(expectedEncodedImage, response.getBody());
     }
+
+    @Test
+    void obtenerImagenNotFound() throws IOException {
+        Long id = 1L;
+        when(bookServicePort.getImage(id)).thenReturn(null);
+
+        ResponseEntity<String> response = bookController.obtenerImagen(id);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
 }
