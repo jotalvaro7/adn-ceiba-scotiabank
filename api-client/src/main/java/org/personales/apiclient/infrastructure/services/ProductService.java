@@ -11,6 +11,7 @@ import org.personales.apiclient.infrastructure.config.CaffeineCacheConfig;
 import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -35,11 +36,13 @@ public class ProductService {
         if(allBooks == null){
             Thread.sleep(1000L);
             allBooks = bookApiFeign.getAllBooks();
+            System.out.println("Books fuera de la cache de redis: " + allBooks);
             booksBucket.set(allBooks, 2, TimeUnit.MINUTES);
         }
         List<RatingDto> allRatings = ratingsBucket.get();
         if(allRatings == null){
             allRatings = ratingAPiFeign.getAllRatings();
+            System.out.println("ratings fuera de la cache de redis: " + allRatings);
             ratingsBucket.set(allRatings, 2, TimeUnit.MINUTES);
         }
         List<ProductDto> allProducts;
@@ -65,5 +68,9 @@ public class ProductService {
                 .ratingDto(ratingDto)
                 .cantidad(cantidad)
                 .build();
+    }
+
+    public String getImageById(Long id){
+        return bookApiFeign.getImageById(id);
     }
 }

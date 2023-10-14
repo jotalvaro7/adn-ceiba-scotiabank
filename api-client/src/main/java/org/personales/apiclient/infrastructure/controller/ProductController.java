@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.personales.apiclient.domain.ProductDto;
 import org.personales.apiclient.infrastructure.services.ProductService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,5 +46,15 @@ public class ProductController {
         ProductDto productById = productServicePort.getProductById(productoId, cantidad);
         log.info("Producto con id: {} encontrado", productoId);
         return new ResponseEntity<>(productById, HttpStatus.OK);
+    }
+
+    @GetMapping("/image/{productoId}")
+    public ResponseEntity<String> getImage(@PathVariable Long productoId){
+        String imageById = productServicePort.getImageById(productoId);
+        if(imageById == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(imageById, HttpStatus.OK);
+
     }
 }

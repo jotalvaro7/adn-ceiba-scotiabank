@@ -1,4 +1,4 @@
-package org.personales.bookapi.infrastructure.configuration;
+package org.personales.ratingapi.infrastructure.configuration;
 
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.WeightedResponseTimeRule;
@@ -20,3 +20,5 @@ public class RibbonConfiguration {
     public IRule ribbonRule(){
         return new WeightedResponseTimeRule();
     }
+
+}

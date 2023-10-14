@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.personales.bookapi.domain.data.BookDto;
 import org.personales.bookapi.domain.ports.api.BookServicePort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -71,6 +73,17 @@ public class BookController {
             bookServicePort.deleteBookById(bookId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+    }
+
+    @GetMapping("/image/{id}")
+    public ResponseEntity<String> obtenerImagen(@PathVariable("id") Long id) throws IOException {
+        String encodedImage = bookServicePort.getImage(id);
+        if(encodedImage == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, "text/plain");
+        return new ResponseEntity<>(encodedImage, headers, HttpStatus.OK);
     }
 
 

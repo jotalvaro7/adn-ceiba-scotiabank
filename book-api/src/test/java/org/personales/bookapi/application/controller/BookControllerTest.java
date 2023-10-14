@@ -9,15 +9,11 @@ import org.personales.bookapi.domain.data.BookDto;
 import org.personales.bookapi.domain.ports.api.BookServicePort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BookControllerTest {
@@ -155,6 +151,30 @@ class BookControllerTest {
         assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
         verify(bookServicePort).getBookById(bookId);
 
+    }
+
+    @Test
+    void getImage_ShouldReturnCodedImage_WhenTheImageExist() throws IOException {
+        Long id = 1L;
+        String expectedEncodedImage = "encoded-image";
+
+        when(bookServicePort.getImage(id)).thenReturn(expectedEncodedImage);
+
+        ResponseEntity<String> response = bookController.obtenerImagen(id);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("text/plain", Objects.requireNonNull(response.getHeaders().getContentType()).toString());
+        assertEquals(expectedEncodedImage, response.getBody());
+    }
+
+    @Test
+    void obtenerImagenNotFound() throws IOException {
+        Long id = 1L;
+        when(bookServicePort.getImage(id)).thenReturn(null);
+
+        ResponseEntity<String> response = bookController.obtenerImagen(id);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
 }

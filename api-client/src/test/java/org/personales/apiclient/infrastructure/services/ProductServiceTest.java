@@ -77,8 +77,8 @@ class ProductServiceTest {
         when(fakeRatingsBucket.get()).thenReturn(null);
 
         List<BookDto> bookDtos = Arrays.asList(
-                new BookDto(1L, "Book 1", "Algun autor", 5.000, 8090),
-                new BookDto(2L, "Book 2",  "Algun autor", 5.000, 8090)
+                new BookDto(1L, "Book 1", "Algun autor", 5.000, "url1", 8090),
+                new BookDto(2L, "Book 2",  "Algun autor", 5.000, "url2",  8090)
         );
         when(bookApiFeign.getAllBooks()).thenReturn(bookDtos);
 
