@@ -12,11 +12,14 @@ public class RibbonConfiguration {
 
     @Bean
     @LoadBalanced
-    public RestTemplate restTemplate(){
+    public RestTemplate restTemplate() {
         return new RestTemplate();
     }
 
     @Bean
-    public IRule ribbonRule(){
+    public IRule ribbonRule() {
         return new WeightedResponseTimeRule();
     }
+
+}
+
